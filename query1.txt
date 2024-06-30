@@ -1,0 +1,19 @@
+(select city, length(city) from station where Length(city)=(select min(length(city)) from station) order by city limit 1) 
+UNION 
+(select city, length(city) from station where length(city)=(select max(length(city)) from station) order by city limit 1);
+
+SELECT CITY, LENGTH(CITY) AS NameLength
+FROM (
+  SELECT CITY, LENGTH(CITY) AS NameLength
+  FROM STATION
+  ORDER BY LENGTH(CITY), CITY
+  FETCH FIRST 1 ROW ONLY
+) AS Shortest
+UNION ALL
+SELECT CITY, LENGTH(CITY) AS NameLength
+FROM (
+  SELECT CITY, LENGTH(CITY) AS NameLength
+  FROM STATION
+  ORDER BY LENGTH(CITY) DESC, CITY
+  FETCH FIRST 1 ROW ONLY
+) AS Longest;
